@@ -10,6 +10,10 @@ import UIKit
 import MapKit
 import CoreLocation
 
+public class TargetView: UIView {
+    
+}
+
 public class LocationPickerViewController: UIViewController {
 	struct CurrentLocationListener {
 		let once: Bool
@@ -53,7 +57,7 @@ public class LocationPickerViewController: UIViewController {
 	/// default: .Default
 	public var statusBarStyle: UIStatusBarStyle = .default
 	
-	public var mapType: MKMapType = .hybrid {
+	public var mapType: MKMapType = .standard {
 		didSet {
 			if isViewLoaded {
 				mapView.mapType = mapType
@@ -69,6 +73,8 @@ public class LocationPickerViewController: UIViewController {
 			}
 		}
 	}
+    
+    public var pinColor: MKPinAnnotationColor = .red
 	
 	static let SearchTermKey = "SearchTermKey"
 	
@@ -77,6 +83,7 @@ public class LocationPickerViewController: UIViewController {
 	let geocoder = CLGeocoder()
 	var localSearch: MKLocalSearch?
 	var searchTimer: Timer?
+    var closeButton: UIBarButtonItem!
 	
 	var currentLocationListeners: [CurrentLocationListener] = []
 	
@@ -153,7 +160,16 @@ public class LocationPickerViewController: UIViewController {
 		if useCurrentLocationAsHint {
 			getCurrentLocation()
 		}
+        
+        //set close button on left if modal
+        closeButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(closeTapped))
+        navigationItem.rightBarButtonItem = closeButton
+       
 	}
+    
+    func closeTapped() {
+        self.dismiss(animated: true, completion: nil)
+    }
 
 	public override var preferredStatusBarStyle : UIStatusBarStyle {
 		return statusBarStyle
@@ -230,6 +246,7 @@ extension LocationPickerViewController: CLLocationManagerDelegate {
 // MARK: Searching
 
 extension LocationPickerViewController: UISearchResultsUpdating {
+    
 	public func updateSearchResults(for searchController: UISearchController) {
 		guard let term = searchController.searchBar.text else { return }
 		
@@ -335,7 +352,7 @@ extension LocationPickerViewController: MKMapViewDelegate {
 		if annotation is MKUserLocation { return nil }
 		
 		let pin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "annotation")
-		pin.pinColor = .green
+		pin.pinColor = pinColor
 		// drop only on long press gesture
 		let fromLongPress = annotation is MKPointAnnotation
 		pin.animatesDrop = fromLongPress
@@ -387,5 +404,14 @@ extension LocationPickerViewController: UISearchBarDelegate {
 			location = nil
 			searchBar.text = " "
 		}
-	}
+    }
+    
+    public func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        navigationItem.rightBarButtonItem = nil
+        return true
+    }
+    
+    public func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        navigationItem.rightBarButtonItem = closeButton
+    }
 }

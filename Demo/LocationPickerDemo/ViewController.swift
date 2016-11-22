@@ -28,13 +28,21 @@ class ViewController: UIViewController {
 	
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "LocationPicker" {
-			let locationPicker = segue.destination as! LocationPickerViewController
-			locationPicker.location = location
-			locationPicker.showCurrentLocationButton = true
+            var locationPicker: LocationPickerViewController!
+            if let navController = segue.destination as? UINavigationController {
+                locationPicker = navController.viewControllers.first as! LocationPickerViewController
+            } else {
+                locationPicker = segue.destination  as! LocationPickerViewController
+            }
+			//locationPicker.location = location
+			locationPicker.showCurrentLocationButton = false
 			locationPicker.useCurrentLocationAsHint = true
 			locationPicker.showCurrentLocationInitially = true
-			
-			locationPicker.completion = { self.location = $0 }
+			locationPicker.pinColor = .red
+			locationPicker.completion = {
+                print($0?.address)
+                self.location = $0
+            }
 		}
 	}
 }
