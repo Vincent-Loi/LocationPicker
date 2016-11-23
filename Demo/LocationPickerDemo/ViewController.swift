@@ -40,7 +40,7 @@ class ViewController: UIViewController {
 			locationPicker.showCurrentLocationInitially = true
 			locationPicker.pinColor = .red
 			locationPicker.completion = {
-                print($0?.address)
+                print($0?.location.coordinate.longitude)
                 self.location = $0
             }
 		}

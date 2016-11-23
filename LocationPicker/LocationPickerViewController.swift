@@ -168,7 +168,7 @@ public class LocationPickerViewController: UIViewController {
 	}
     
     func closeTapped() {
-        self.dismiss(animated: true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
 
 	public override var preferredStatusBarStyle : UIStatusBarStyle {
@@ -377,7 +377,8 @@ extension LocationPickerViewController: MKMapViewDelegate {
 		if let navigation = navigationController, navigation.viewControllers.count > 1 {
 			navigation.popViewController(animated: true)
 		} else {
-			presentingViewController?.dismiss(animated: true, completion: nil)
+            closeTapped()
+			//presentingViewController?.dismiss(animated: true, completion: nil)
 		}
 	}
 	
