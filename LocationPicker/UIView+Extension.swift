@@ -11,7 +11,7 @@ import UIKit
 
 extension UIView {
     class func fromNib<T : UIView>() -> T {
-        let bundle = Bundle(for: LocationPickerViewController.self)
+        let bundle = Bundle(for: SendCurrentLocation.self)
         return bundle.loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T
     }
 }
