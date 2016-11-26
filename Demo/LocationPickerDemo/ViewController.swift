@@ -43,6 +43,7 @@ class ViewController: UIViewController {
                 print($0?.placemark.name)
                 self.location = $0
             }
+            
 		}
 	}
 }

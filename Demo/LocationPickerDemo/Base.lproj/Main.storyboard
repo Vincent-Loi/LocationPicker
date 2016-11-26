@@ -90,7 +90,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lQt-8u-FKk" customClass="TargetView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lQt-8u-FKk" customClass="TargetView">
                                 <rect key="frame" x="0.0" y="64" width="375" height="555"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -100,6 +100,7 @@
                         <constraints>
                             <constraint firstItem="lQt-8u-FKk" firstAttribute="leading" secondItem="y9p-Ca-sjb" secondAttribute="leading" id="Pco-ff-Tbj"/>
                             <constraint firstAttribute="trailing" secondItem="lQt-8u-FKk" secondAttribute="trailing" id="VWY-Xf-ePG"/>
+                            <constraint firstItem="zgc-bj-AVo" firstAttribute="top" secondItem="lQt-8u-FKk" secondAttribute="bottom" constant="48" id="cSn-wK-g4z"/>
                             <constraint firstItem="lQt-8u-FKk" firstAttribute="top" secondItem="1RZ-F5-oIB" secondAttribute="bottom" id="yOM-Ta-EtD"/>
                         </constraints>
                     </view>
@@ -125,7 +126,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DiO-rn-6db" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="255" y="306"/>
+            <point key="canvasLocation" x="-119" y="181"/>
         </scene>
     </scenes>
     <color key="tintColor" red="0.86274509799999999" green="0.31372549020000001" blue="0.17254901959999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
