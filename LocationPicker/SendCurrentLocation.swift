@@ -16,4 +16,6 @@ class SendCurrentLocation: UIView {
         didSelectLocation()
     }
     
+    
+    
 }
