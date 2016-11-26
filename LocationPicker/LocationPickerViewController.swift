@@ -44,14 +44,17 @@ public class LocationPickerViewController: UIViewController {
     /// default: "Select"
     public var selectButtonTitle = "Send"
     
+    public var sendUserLocationEnabled = true
+    
     public var buttonBackgroundColor: UIColor = .red
     public var buttonTitleColor: UIColor = .white
 	
 	lazy public var currentLocationButtonBackground: UIColor = {
-		if let navigationBar = self.navigationController?.navigationBar,
-			let barTintColor = navigationBar.barTintColor {
-				return barTintColor
-		} else { return .white }
+        return .white
+//		if let navigationBar = self.navigationController?.navigationBar,
+//			let barTintColor = navigationBar.barTintColor {
+//				return barTintColor
+//		} else { return .white }
 	}()
     
     /// default: .Minimal
@@ -92,6 +95,7 @@ public class LocationPickerViewController: UIViewController {
 	
 	var mapView: MKMapView!
 	var locationButton: UIButton?
+    var sendLocationView: SendCurrentLocation?
 	
 	lazy var results: LocationSearchResultsViewController = {
 		let results = LocationSearchResultsViewController()
@@ -138,7 +142,30 @@ public class LocationPickerViewController: UIViewController {
 			                 for: .touchUpInside)
 			view.addSubview(button)
 			locationButton = button
+            
 		}
+        
+        if sendUserLocationEnabled {
+            let sendLocationView: SendCurrentLocation = .fromNib()
+            sendLocationView.frame = CGRect(x: 0, y: view.frame.height - 50, width: view.frame.width, height: 50)
+            sendLocationView.didSelectLocation = {
+                
+
+                let listener = CurrentLocationListener(once: true) { [weak self] location in
+                   print("here")
+                    self?.retrieveAddress(location: location)
+                    //self?.completion?(self?.location)
+                    //self?.dismissSelf()
+                }
+                self.currentLocationListeners.append(listener)
+                //
+                self.getCurrentLocation()
+                
+            }
+            view.addSubview(sendLocationView)
+            self.sendLocationView = sendLocationView
+        }
+
 	}
 	
 	public override func viewDidLoad() {
@@ -185,7 +212,7 @@ public class LocationPickerViewController: UIViewController {
 		if let button = locationButton {
 			button.frame.origin = CGPoint(
 				x: view.frame.width - button.frame.width - 16,
-				y: view.frame.height - button.frame.height - 20
+				y: view.frame.height - button.frame.height - 70
 			)
 		}
 		
@@ -220,6 +247,7 @@ public class LocationPickerViewController: UIViewController {
 			self?.showCoordinates(location.coordinate, animated: animated)
 		}
 		currentLocationListeners.append(listener)
+        //
 		getCurrentLocation()
 	}
 	
@@ -319,33 +347,38 @@ extension LocationPickerViewController {
 			let coordinates = mapView.convert(point, toCoordinateFrom: mapView)
 			let location = CLLocation(latitude: coordinates.latitude, longitude: coordinates.longitude)
 			
-			// clean location, cleans out old annotation too
-			self.location = nil
-			
 			// add point annotation to map
 			let annotation = MKPointAnnotation()
 			annotation.coordinate = coordinates
 			mapView.addAnnotation(annotation)
 			
-			geocoder.cancelGeocode()
-			geocoder.reverseGeocodeLocation(location) { response, error in
-				if let error = error {
-					// show error and remove annotation
-					let alert = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
-					alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in }))
-					self.present(alert, animated: true) {
-						self.mapView.removeAnnotation(annotation)
-					}
-				} else if let placemark = response?.first {
-					// get POI name from placemark if any
-					let name = placemark.name
-					
-					// pass user selected location too
-					self.location = Location(name: name, location: location, placemark: placemark)
-				}
-			}
+            retrieveAddress(location: location)
 		}
 	}
+    
+    func retrieveAddress(location: CLLocation, annotation: MKPointAnnotation? = nil) {
+        // clean location, cleans out old annotation too
+        self.location = nil
+        geocoder.cancelGeocode()
+        geocoder.reverseGeocodeLocation(location) { response, error in
+            if let error = error {
+                // show error and remove annotation
+                let alert = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in }))
+                self.present(alert, animated: true) {
+                    if let annotation = annotation {
+                        self.mapView.removeAnnotation(annotation)
+                    }
+                }
+            } else if let placemark = response?.first {
+                // get POI name from placemark if any
+                let name = placemark.name
+                
+                // pass user selected location too
+                self.location = Location(name: name, location: location, placemark: placemark)
+            }
+        }
+    }
 }
 
 // MARK: MKMapViewDelegate
@@ -379,12 +412,16 @@ extension LocationPickerViewController: MKMapViewDelegate {
 	
 	public func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
 		completion?(location)
-		if let navigation = navigationController, navigation.viewControllers.count > 1 {
-			navigation.popViewController(animated: true)
-		} else {
-			presentingViewController?.dismiss(animated: true, completion: nil)
-		}
+		dismissSelf()
 	}
+    
+    func dismissSelf() {
+        if let navigation = navigationController, navigation.viewControllers.count > 1 {
+            navigation.popViewController(animated: true)
+        } else {
+            presentingViewController?.dismiss(animated: true, completion: nil)
+        }
+    }
 	
 	public func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
 		let pins = mapView.annotations.filter { $0 is MKPinAnnotationView }

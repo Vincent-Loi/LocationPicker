@@ -35,7 +35,7 @@ class ViewController: UIViewController {
                 locationPicker = segue.destination  as! LocationPickerViewController
             }
 			//locationPicker.location = location
-			locationPicker.showCurrentLocationButton = false
+			locationPicker.showCurrentLocationButton = true
 			locationPicker.useCurrentLocationAsHint = true
 			locationPicker.showCurrentLocationInitially = true
 			locationPicker.pinColor = .red
