@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		36C31B5F1DEA36EA00992BB9 /* SendCurrentLocation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 36C31B5E1DEA36EA00992BB9 /* SendCurrentLocation.xib */; };
-		36C31B611DEA370900992BB9 /* SendCurrentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C31B601DEA370900992BB9 /* SendCurrentLocation.swift */; };
 		B62463051B68A4DE00646DE2 /* LocationPicker.h in Headers */ = {isa = PBXBuildFile; fileRef = B62463041B68A4DE00646DE2 /* LocationPicker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B62463251B68A56D00646DE2 /* LocationPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62463241B68A56D00646DE2 /* LocationPickerViewController.swift */; };
 		B624632C1B68A90900646DE2 /* LocationSearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B624632B1B68A90900646DE2 /* LocationSearchResultsViewController.swift */; };
@@ -18,8 +16,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		36C31B5E1DEA36EA00992BB9 /* SendCurrentLocation.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SendCurrentLocation.xib; sourceTree = "<group>"; };
-		36C31B601DEA370900992BB9 /* SendCurrentLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendCurrentLocation.swift; sourceTree = "<group>"; };
 		B62462FF1B68A4DE00646DE2 /* LocationPicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LocationPicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B62463031B68A4DE00646DE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B62463041B68A4DE00646DE2 /* LocationPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationPicker.h; sourceTree = "<group>"; };
@@ -60,8 +56,6 @@
 		B62463011B68A4DE00646DE2 /* LocationPicker */ = {
 			isa = PBXGroup;
 			children = (
-				36C31B5E1DEA36EA00992BB9 /* SendCurrentLocation.xib */,
-				36C31B601DEA370900992BB9 /* SendCurrentLocation.swift */,
 				B62463041B68A4DE00646DE2 /* LocationPicker.h */,
 				B62463241B68A56D00646DE2 /* LocationPickerViewController.swift */,
 				B624632B1B68A90900646DE2 /* LocationSearchResultsViewController.swift */,
@@ -152,7 +146,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36C31B5F1DEA36EA00992BB9 /* SendCurrentLocation.xib in Resources */,
 				B67F38F91B9C793C003ADFC8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -164,7 +157,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36C31B611DEA370900992BB9 /* SendCurrentLocation.swift in Sources */,
 				B6D9F5161B9C9C670083EE55 /* SearchHistoryManager.swift in Sources */,
 				B624632C1B68A90900646DE2 /* LocationSearchResultsViewController.swift in Sources */,
 				B624632E1B68E25D00646DE2 /* Location.swift in Sources */,

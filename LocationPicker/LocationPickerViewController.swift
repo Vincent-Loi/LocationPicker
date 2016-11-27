@@ -126,11 +126,15 @@ public class LocationPickerViewController: UIViewController {
         // http://stackoverflow.com/questions/32675001/uisearchcontroller-warning-attempting-to-load-the-view-of-a-view-controller/
         let _ = searchController.view
 	}
+    
+    let defaultBlue = UIColor(red: 14/255, green: 122/255, blue: 254/255, alpha: 1.0)
+
 	
 	public override func loadView() {
 		mapView = MKMapView(frame: UIScreen.main.bounds)
 		mapView.mapType = mapType
 		view = mapView
+        navigationController?.navigationBar.tintColor = defaultBlue
 		navigationController?.navigationBar.barTintColor = currentLocationButtonBackground
 		if showCurrentLocationButton {
 			let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
@@ -153,7 +157,13 @@ public class LocationPickerViewController: UIViewController {
 //            let sendLocationView: SendCurrentLocation = bundle.loadNibNamed("SendCurrentLocation", owner: nil, options: nil)?.first as! SendCurrentLocation
             
             let sendLocationView = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
-            sendLocationView.backgroundColor = .lightGray
+            sendLocationView.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 0.7)
+            sendLocationView.setTitleColor(defaultBlue, for: .normal)
+            sendLocationView.setTitle("Send your current location", for: .normal)
+            sendLocationView.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+            sendLocationView.contentHorizontalAlignment = .left
+            sendLocationView.imageEdgeInsets.left = 15
+            sendLocationView.titleEdgeInsets.left = 20
             let bundle = Bundle(for: LocationPickerViewController.self)
             sendLocationView.setImage(UIImage(named: "icoCurrentLocation", in: bundle, compatibleWith: nil), for: UIControlState())
             sendLocationView.addTarget(self, action: #selector(LocationPickerViewController.sendCurrentLocation),
@@ -423,7 +433,7 @@ extension LocationPickerViewController: MKMapViewDelegate {
 //            let width = titleLabel.textRect(forBounds: CGRect(x: 0, y: 0, width: 70, height: 50), limitedToNumberOfLines: 1).width
 //            button.frame.size = CGSize(width: width, height: 50)
 //        }
-		button.setTitleColor(buttonTitleColor, for: UIControlState())
+		button.setTitleColor(buttonTitleColor, for: .normal)
 		return button
 	}
 	
