@@ -157,7 +157,7 @@ public class LocationPickerViewController: UIViewController {
 //            let sendLocationView: SendCurrentLocation = bundle.loadNibNamed("SendCurrentLocation", owner: nil, options: nil)?.first as! SendCurrentLocation
             
             let sendLocationView = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
-            sendLocationView.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 0.7)
+            sendLocationView.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 0.9)
             sendLocationView.setTitleColor(defaultBlue, for: .normal)
             sendLocationView.setTitle("Send your current location", for: .normal)
             sendLocationView.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -429,10 +429,6 @@ extension LocationPickerViewController: MKMapViewDelegate {
 		button.setTitle(selectButtonTitle, for: UIControlState())
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         button.backgroundColor = buttonBackgroundColor
-//        if let titleLabel = button.titleLabel {
-//            let width = titleLabel.textRect(forBounds: CGRect(x: 0, y: 0, width: 70, height: 50), limitedToNumberOfLines: 1).width
-//            button.frame.size = CGSize(width: width, height: 50)
-//        }
 		button.setTitleColor(buttonTitleColor, for: .normal)
 		return button
 	}
