@@ -137,12 +137,13 @@ public class LocationPickerViewController: UIViewController {
         navigationController?.navigationBar.tintColor = defaultBlue
 		navigationController?.navigationBar.barTintColor = currentLocationButtonBackground
 		if showCurrentLocationButton {
-			let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-			button.backgroundColor = currentLocationButtonBackground
+			let button = UIButton(frame: CGRect(x: 0, y: 0, width: 35, height: 35))
+			button.backgroundColor = .white
 			button.layer.masksToBounds = true
 			button.layer.cornerRadius = 16
+            button.contentEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2)
 			let bundle = Bundle(for: LocationPickerViewController.self)
-			button.setImage(UIImage(named: "geolocation", in: bundle, compatibleWith: nil), for: UIControlState())
+			button.setImage(UIImage(named: "located", in: bundle, compatibleWith: nil), for: UIControlState())
 			button.addTarget(self, action: #selector(LocationPickerViewController.currentLocationPressed),
 			                 for: .touchUpInside)
 			view.addSubview(button)
