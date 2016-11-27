@@ -130,7 +130,7 @@ public class LocationPickerViewController: UIViewController {
 		mapView = MKMapView(frame: UIScreen.main.bounds)
 		mapView.mapType = mapType
 		view = mapView
-		
+		navigationController?.navigationBar.barTintColor = currentLocationButtonBackground
 		if showCurrentLocationButton {
 			let button = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
 			button.backgroundColor = currentLocationButtonBackground
@@ -218,6 +218,12 @@ public class LocationPickerViewController: UIViewController {
 				y: view.frame.height - button.frame.height - 70
 			)
 		}
+        if let sendButton = sendLocationView {
+            sendButton.frame.origin = CGPoint(
+                x: 0,
+                y: view.frame.height - sendButton.frame.height
+            )
+        }
 		
 		// setting initial location here since viewWillAppear is too early, and viewDidAppear is too late
 		if !presentedInitialLocation {
@@ -366,13 +372,13 @@ extension LocationPickerViewController {
         geocoder.reverseGeocodeLocation(location) { response, error in
             if let error = error {
                 // show error and remove annotation
-                let alert = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in }))
-                self.present(alert, animated: true) {
-                    if let annotation = annotation {
-                        self.mapView.removeAnnotation(annotation)
-                    }
-                }
+//                let alert = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in }))
+//                self.present(alert, animated: true) {
+//                    if let annotation = annotation {
+//                        self.mapView.removeAnnotation(annotation)
+//                    }
+//                }
             } else if let placemark = response?.first {
                 // get POI name from placemark if any
                 let name = placemark.name
