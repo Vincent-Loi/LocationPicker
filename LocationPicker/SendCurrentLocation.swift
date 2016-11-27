@@ -12,9 +12,6 @@ class SendCurrentLocation: UIView {
     
     var didSelectLocation: (()->())!
     
-    override func awakeFromNib() {
-        self.translatesAutoresizingMaskIntoConstraints = true
-    }
     
     @IBAction func onCurrentLocation(_ sender: Any) {
         didSelectLocation()

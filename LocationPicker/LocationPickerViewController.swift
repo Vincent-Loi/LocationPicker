@@ -150,7 +150,7 @@ public class LocationPickerViewController: UIViewController {
 
             
             let sendLocationView: SendCurrentLocation = bundle.loadNibNamed("SendCurrentLocation", owner: nil, options: nil)?.first as! SendCurrentLocation
-            sendLocationView.frame = CGRect(x: 0, y: view.frame.height - 50, width: view.frame.width, height: 50)
+           // sendLocationView.frame = CGRect(x: 0, y: view.frame.height - 50, width: view.frame.width, height: 50)
             sendLocationView.didSelectLocation = {
                 
 

@@ -14,7 +14,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="57c-9V-yuI" userLabel="CurrentLocationView" customClass="AnimatableView" customModule="IBAnimatable">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="57c-9V-yuI" userLabel="CurrentLocationView">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKi-gs-cUa" userLabel="Checkbox">
@@ -51,15 +51,6 @@
                         <constraint firstAttribute="trailing" secondItem="caC-bf-NKR" secondAttribute="trailing" constant="15" id="rD5-YN-LA7"/>
                         <constraint firstItem="caC-bf-NKR" firstAttribute="top" secondItem="57c-9V-yuI" secondAttribute="top" constant="15.5" id="w0r-OK-X6f"/>
                     </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                            <color key="value" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                            <real key="value" value="0.5"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="string" keyPath="_borderSides" value="Top"/>
-                    </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
