@@ -20,7 +20,8 @@ public class LocationPickerViewController: UIViewController {
 		let action: (CLLocation) -> ()
 	}
 	
-	public var completion: ((Location?) -> ())?
+    public var completion: ((Location?) -> ())?
+    public var cancelled: (() -> ())?
 	
 	// region distance to be used for creation region when user selects place from search results
 	public var resultRegionDistance: CLLocationDistance = 600
@@ -95,7 +96,7 @@ public class LocationPickerViewController: UIViewController {
 	
 	var mapView: MKMapView!
 	var locationButton: UIButton?
-    var sendLocationView: SendCurrentLocation?
+    var sendLocationView: UIButton?
 	
 	lazy var results: LocationSearchResultsViewController = {
 		let results = LocationSearchResultsViewController()
@@ -146,30 +147,36 @@ public class LocationPickerViewController: UIViewController {
 		}
         
         if sendUserLocationEnabled {
-            let bundle = Bundle(for: LocationPickerViewController.self)
-
+//            let bundle = Bundle(for: LocationPickerViewController.self)
+//
+//            
+//            let sendLocationView: SendCurrentLocation = bundle.loadNibNamed("SendCurrentLocation", owner: nil, options: nil)?.first as! SendCurrentLocation
             
-            let sendLocationView: SendCurrentLocation = bundle.loadNibNamed("SendCurrentLocation", owner: nil, options: nil)?.first as! SendCurrentLocation
-           // sendLocationView.frame = CGRect(x: 0, y: view.frame.height - 50, width: view.frame.width, height: 50)
-            sendLocationView.didSelectLocation = {
-                
-
-                let listener = CurrentLocationListener(once: true) { [weak self] location in
-                   print("here")
-                    self?.retrieveAddress(location: location)
-                    //self?.completion?(self?.location)
-                    //self?.dismissSelf()
-                }
-                self.currentLocationListeners.append(listener)
-                //
-                self.getCurrentLocation()
-                
-            }
+            let sendLocationView = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
+            sendLocationView.backgroundColor = .lightGray
+            let bundle = Bundle(for: LocationPickerViewController.self)
+            sendLocationView.setImage(UIImage(named: "icoCurrentLocation", in: bundle, compatibleWith: nil), for: UIControlState())
+            sendLocationView.addTarget(self, action: #selector(LocationPickerViewController.sendCurrentLocation),
+                             for: .touchUpInside)
+            
             view.addSubview(sendLocationView)
             self.sendLocationView = sendLocationView
         }
 
 	}
+    
+    func sendCurrentLocation() {
+        let listener = CurrentLocationListener(once: true) { [weak self] location in
+            print("here")
+            self?.retrieveAddress(location: location)
+            //self?.completion?(self?.location)
+            //self?.dismissSelf()
+        }
+        self.currentLocationListeners.append(listener)
+        //
+        self.getCurrentLocation()
+
+    }
 	
 	public override func viewDidLoad() {
 		super.viewDidLoad()
@@ -201,6 +208,7 @@ public class LocationPickerViewController: UIViewController {
 	}
     
     func closeTapped() {
+        cancelled?()
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
 
