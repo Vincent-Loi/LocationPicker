@@ -179,13 +179,16 @@ public class LocationPickerViewController: UIViewController {
     func sendCurrentLocation() {
         let listener = CurrentLocationListener(once: true) { [weak self] location in
             print("here")
+            
             self?.retrieveAddress(location: location)
             //self?.completion?(self?.location)
             //self?.dismissSelf()
         }
+        
         self.currentLocationListeners.append(listener)
         //
         self.getCurrentLocation()
+        self.showCurrentLocation()
 
     }
 	
