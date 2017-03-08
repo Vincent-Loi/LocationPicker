@@ -40,7 +40,9 @@ public class LocationPickerViewController: UIViewController {
 	public var searchBarPlaceholder = "Search or enter an address"
 	
 	/// default: "Search History"
-	public var searchHistoryLabel = "Search History"
+    public var searchHistoryLabel = "Search History"
+    
+    public var sendCurrentLocationText = "Send your current location"
     
     /// default: "Select"
     public var selectButtonTitle = "Send"
@@ -160,7 +162,7 @@ public class LocationPickerViewController: UIViewController {
             let sendLocationView = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
             sendLocationView.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 0.9)
             sendLocationView.setTitleColor(defaultBlue, for: .normal)
-            sendLocationView.setTitle("Send your current location".localized, for: .normal)
+            sendLocationView.setTitle("Send your current location", for: .normal)
             sendLocationView.titleLabel?.font = UIFont.systemFont(ofSize: 16)
             sendLocationView.contentHorizontalAlignment = .left
             sendLocationView.imageEdgeInsets.left = 15
