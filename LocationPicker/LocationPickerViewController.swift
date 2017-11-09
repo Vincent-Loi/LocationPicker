@@ -219,9 +219,10 @@ open class LocationPickerViewController: UIViewController {
 		}
         
         //set close button on left if modal
-        closeButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(closeTapped))
-        navigationItem.rightBarButtonItem = closeButton
-       
+        if self.isBeingPresented {
+            closeButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(closeTapped))
+            navigationItem.rightBarButtonItem = closeButton
+        }
 	}
     
     func closeTapped() {
