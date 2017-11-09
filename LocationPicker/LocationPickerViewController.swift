@@ -14,7 +14,7 @@ public class TargetView: UIView {
     
 }
 
-public class LocationPickerViewController: UIViewController {
+open class LocationPickerViewController: UIViewController {
 	struct CurrentLocationListener {
 		let once: Bool
 		let action: (CLLocation) -> ()
@@ -120,19 +120,18 @@ public class LocationPickerViewController: UIViewController {
 		searchBar.placeholder = self.searchBarPlaceholder
 		return searchBar
 	}()
-	
-	deinit {
-		searchTimer?.invalidate()
-		localSearch?.cancel()
-		geocoder.cancelGeocode()
-        // http://stackoverflow.com/questions/32675001/uisearchcontroller-warning-attempting-to-load-the-view-of-a-view-controller/
-        let _ = searchController.view
-	}
+    
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        searchTimer?.invalidate()
+        localSearch?.cancel()
+        geocoder.cancelGeocode()
+    }
     
     let defaultBlue = UIColor(red: 14/255, green: 122/255, blue: 254/255, alpha: 1.0)
 
 	
-	public override func loadView() {
+	open override func loadView() {
 		mapView = MKMapView(frame: UIScreen.main.bounds)
 		mapView.mapType = mapType
 		view = mapView
@@ -194,7 +193,7 @@ public class LocationPickerViewController: UIViewController {
 
     }
 	
-	public override func viewDidLoad() {
+	open override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		locationManager.delegate = self
@@ -202,9 +201,11 @@ public class LocationPickerViewController: UIViewController {
 		searchBar.delegate = self
 		
 		// gesture recognizer for adding by tap
-		mapView.addGestureRecognizer(UILongPressGestureRecognizer(target: self,
-            action: #selector(LocationPickerViewController.addLocation(_:))))
-		
+        let locationSelectGesture = UILongPressGestureRecognizer(
+            target: self, action: #selector(addLocation(_:)))
+        locationSelectGesture.delegate = self
+		mapView.addGestureRecognizer(locationSelectGesture)
+
 		// search
 		navigationItem.titleView = searchBar
 		definesPresentationContext = true
@@ -228,13 +229,13 @@ public class LocationPickerViewController: UIViewController {
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
 
-	public override var preferredStatusBarStyle : UIStatusBarStyle {
+	open override var preferredStatusBarStyle : UIStatusBarStyle {
 		return statusBarStyle
 	}
 	
 	var presentedInitialLocation = false
 	
-	public override func viewDidLayoutSubviews() {
+	open override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		if let button = locationButton {
 			button.frame.origin = CGPoint(
@@ -386,6 +387,23 @@ extension LocationPickerViewController {
 			mapView.addAnnotation(annotation)
 			
             retrieveAddress(location: location)
+			geocoder.cancelGeocode()
+			geocoder.reverseGeocodeLocation(location) { response, error in
+				if let error = error as? NSError, error.code != 10 { // ignore cancelGeocode errors
+					// show error and remove annotation
+					let alert = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
+					alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { _ in }))
+					self.present(alert, animated: true) {
+						self.mapView.removeAnnotation(annotation)
+					}
+				} else if let placemark = response?.first {
+					// get POI name from placemark if any
+					let name = placemark.areasOfInterest?.first
+					
+					// pass user selected location too
+					self.location = Location(name: name, location: location, placemark: placemark)
+				}
+			}
 		}
 	}
     
@@ -455,7 +473,17 @@ extension LocationPickerViewController: MKMapViewDelegate {
 	public func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
 		let pins = mapView.annotations.filter { $0 is MKPinAnnotationView }
 		assert(pins.count <= 1, "Only 1 pin annotation should be on map at a time")
+
+        if let userPin = views.first(where: { $0.annotation is MKUserLocation }) {
+            userPin.canShowCallout = false
+        }
 	}
+}
+
+extension LocationPickerViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
 }
 
 // MARK: UISearchBarDelegate
