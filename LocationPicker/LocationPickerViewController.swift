@@ -219,10 +219,8 @@ open class LocationPickerViewController: UIViewController {
 		}
         
         //set close button on left if modal
-        if self.isBeingPresented {
-            closeButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(closeTapped))
-            navigationItem.rightBarButtonItem = closeButton
-        }
+        closeButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(closeTapped))
+        navigationItem.rightBarButtonItem = closeButton
 	}
     
     func closeTapped() {
@@ -364,6 +362,7 @@ extension LocationPickerViewController: UISearchResultsUpdating {
 	func selectedLocation(_ location: Location) {
 		// dismiss search results
 		dismiss(animated: true) {
+            self.navigationItem.rightBarButtonItem = self.closeButton
 			// set location, this also adds annotation
 			self.location = location
 			self.showCoordinates(location.coordinate)
@@ -512,6 +511,11 @@ extension LocationPickerViewController: UISearchBarDelegate {
     }
     
     public func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        navigationItem.rightBarButtonItem = searchController.isActive ? nil : closeButton
+    }
+    
+    public func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         navigationItem.rightBarButtonItem = closeButton
     }
+    
 }
