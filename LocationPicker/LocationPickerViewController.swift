@@ -132,7 +132,11 @@ open class LocationPickerViewController: UIViewController {
 
 	
 	open override func loadView() {
-		mapView = MKMapView(frame: UIScreen.main.bounds)
+        if #available(iOS 11.0, *) {
+            mapView = MKMapView(frame: UIApplication.shared.keyWindow?.safeAreaLayoutGuide.layoutFrame ?? UIScreen.main.bounds)
+        } else {
+            mapView = MKMapView(frame: UIScreen.main.bounds)
+        }
 		mapView.mapType = mapType
 		view = mapView
         navigationController?.navigationBar.tintColor = defaultBlue
@@ -159,6 +163,13 @@ open class LocationPickerViewController: UIViewController {
 //            let sendLocationView: SendCurrentLocation = bundle.loadNibNamed("SendCurrentLocation", owner: nil, options: nil)?.first as! SendCurrentLocation
             
             let sendLocationView = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 50))
+            
+            if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow, window.safeAreaInsets.bottom > 0 {
+                sendLocationView.frame.size.height += window.safeAreaInsets.bottom
+                sendLocationView.imageEdgeInsets.bottom += window.safeAreaInsets.bottom
+                sendLocationView.titleEdgeInsets.bottom += window.safeAreaInsets.bottom
+            }
+            
             sendLocationView.backgroundColor = UIColor(red: 247/255, green: 247/255, blue: 248/255, alpha: 0.9)
             sendLocationView.setTitleColor(defaultBlue, for: .normal)
             sendLocationView.setTitle(sendCurrentLocationText, for: .normal)
@@ -241,6 +252,9 @@ open class LocationPickerViewController: UIViewController {
 				x: view.frame.width - button.frame.width - 16,
 				y: view.frame.height - button.frame.height - 70
 			)
+            if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow, window.safeAreaInsets.bottom > 0 {
+                button.frame.origin.y -= window.safeAreaInsets.bottom
+            }
 		}
         if let sendButton = sendLocationView {
             sendButton.frame.origin = CGPoint(
