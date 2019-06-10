@@ -61,7 +61,7 @@ open class LocationPickerViewController: UIViewController {
 	}()
     
     /// default: .Minimal
-    public var searchBarStyle: UISearchBarStyle = .minimal
+    public var searchBarStyle: UISearchBar.Style = .minimal
 
 	/// default: .Default
 	public var statusBarStyle: UIStatusBarStyle = .default
@@ -146,9 +146,9 @@ open class LocationPickerViewController: UIViewController {
 			button.backgroundColor = .white
 			button.layer.masksToBounds = true
 			button.layer.cornerRadius = 16
-            button.contentEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2)
+            button.contentEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
 			let bundle = Bundle(for: LocationPickerViewController.self)
-			button.setImage(UIImage(named: "located", in: bundle, compatibleWith: nil), for: UIControlState())
+            button.setImage(UIImage(named: "located", in: bundle, compatibleWith: nil), for: UIControl.State())
 			button.addTarget(self, action: #selector(LocationPickerViewController.currentLocationPressed),
 			                 for: .touchUpInside)
 			view.addSubview(button)
@@ -178,7 +178,7 @@ open class LocationPickerViewController: UIViewController {
             sendLocationView.imageEdgeInsets.left = 15
             sendLocationView.titleEdgeInsets.left = 20
             let bundle = Bundle(for: LocationPickerViewController.self)
-            sendLocationView.setImage(UIImage(named: "icoCurrentLocation", in: bundle, compatibleWith: nil), for: UIControlState())
+            sendLocationView.setImage(UIImage(named: "icoCurrentLocation", in: bundle, compatibleWith: nil), for: UIControl.State())
             sendLocationView.addTarget(self, action: #selector(LocationPickerViewController.sendCurrentLocation),
                              for: .touchUpInside)
             
@@ -188,7 +188,7 @@ open class LocationPickerViewController: UIViewController {
 
 	}
     
-    func sendCurrentLocation() {
+    @objc func sendCurrentLocation() {
         let listener = CurrentLocationListener(once: true) { [weak self] location in
             print("here")
             
@@ -234,7 +234,7 @@ open class LocationPickerViewController: UIViewController {
         navigationItem.rightBarButtonItem = closeButton
 	}
     
-    func closeTapped() {
+    @objc func closeTapped() {
         cancelled?()
         presentingViewController?.dismiss(animated: true, completion: nil)
     }
@@ -285,7 +285,7 @@ open class LocationPickerViewController: UIViewController {
 		locationManager.startUpdatingLocation()
 	}
 	
-	func currentLocationPressed() {
+    @objc func currentLocationPressed() {
 		showCurrentLocation()
 	}
 	
@@ -307,7 +307,7 @@ open class LocationPickerViewController: UIViewController {
 	}
 	
 	func showCoordinates(_ coordinate: CLLocationCoordinate2D, animated: Bool = true) {
-		let region = MKCoordinateRegionMakeWithDistance(coordinate, resultRegionDistance, resultRegionDistance)
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: resultRegionDistance, longitudinalMeters: resultRegionDistance)
 		mapView.setRegion(region, animated: animated)
 	}
 }
@@ -347,12 +347,12 @@ extension LocationPickerViewController: UISearchResultsUpdating {
 		}
 	}
 	
-	func searchFromTimer(_ timer: Timer) {
+    @objc func searchFromTimer(_ timer: Timer) {
 		guard let userInfo = timer.userInfo as? [String: AnyObject],
 			let term = userInfo[LocationPickerViewController.SearchTermKey] as? String
 			else { return }
 		
-		let request = MKLocalSearchRequest()
+        let request = MKLocalSearch.Request()
 		request.naturalLanguageQuery = term
 		
 		if let location = locationManager.location, useCurrentLocationAsHint {
@@ -367,7 +367,7 @@ extension LocationPickerViewController: UISearchResultsUpdating {
 		}
 	}
 	
-	func showItemsForSearchResult(_ searchResult: MKLocalSearchResponse?) {
+    func showItemsForSearchResult(_ searchResult: MKLocalSearch.Response?) {
 		results.locations = searchResult?.mapItems.map { Location(name: $0.name, placemark: $0.placemark) } ?? []
 		results.isShowingHistory = false
 		results.tableView.reloadData()
@@ -389,7 +389,7 @@ extension LocationPickerViewController: UISearchResultsUpdating {
 // MARK: Selecting location with gesture
 
 extension LocationPickerViewController {
-	func addLocation(_ gestureRecognizer: UIGestureRecognizer) {
+    @objc func addLocation(_ gestureRecognizer: UIGestureRecognizer) {
 		if gestureRecognizer.state == .began {
 			let point = gestureRecognizer.location(in: mapView)
 			let coordinates = mapView.convert(point, toCoordinateFrom: mapView)
@@ -464,7 +464,7 @@ extension LocationPickerViewController: MKMapViewDelegate {
     
 	func selectLocationButton() -> UIButton {
 		let button = UIButton(frame: CGRect(x: 0, y: 0, width: 80, height: 50))
-		button.setTitle(selectButtonTitle, for: UIControlState())
+        button.setTitle(selectButtonTitle, for: UIControl.State())
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         button.backgroundColor = buttonBackgroundColor
 		button.setTitleColor(buttonTitleColor, for: .normal)
